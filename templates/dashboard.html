@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dashboard</title>
+</head>
+<body>
+    <h1>Dashboard</h1>
+    <table>
+        <tr>
+            <th>ID</th>
+            <th>Intensity</th>
+            <th>Likelihood</th>
+            <th>Relevance</th>
+            <th>Year</th>
+            <th>Country</th>
+            <th>Topics</th>
+            <th>Region</th>
+            <th>City</th>
+        </tr>
+        {% for record in data %}
+        <tr>
+            <td>{{ record['id'] }}</td>
+            <td>{{ record['intensity'] }}</td>
+            <td>{{ record['likelihood'] }}</td>
+            <td>{{ record['relevance'] }}</td>
+            <td>{{ record['year'] }}</td>
+            <td>{{ record['country'] }}</td>
+            <td>{{ record['topics'] }}</td>
+            <td>{{ record['region'] }}</td>
+            <td>{{ record['city'] }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>

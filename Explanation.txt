@@ -1,0 +1,11 @@
+When the document is ready, it makes an AJAX request to get data from the URL http://localhost:5000/api/v1/records, which should return data in JSON format. The data is stored in a variable called data.
+
+It populates the filter options with the unique values from the data by iterating over the data array and pushing the unique values into separate arrays for each filter option (e.g. end_years, intensities, etc.). It then sorts each of these arrays and adds them as options to the corresponding filter element in the HTML code (e.g. #end-year, #intensity, etc.) using jQuery's append() function.
+
+It adds event listeners to each filter option element and calls a function called filterData() when any of them are changed.
+
+When filterData() is called, it gets the selected values from each filter option element and stores them in variables.
+
+It then filters the data array based on the selected values. If a filter option has a selected value, it filters the data array using Array.prototype.filter() method with a callback function that compares the value with the corresponding property in the data object. If a filter option does not have a selected value, it does not apply any filter.
+
+The filtered data is then displayed in the UI. The specific code that handles this part of the functionality is not shown in the provided code snippet.

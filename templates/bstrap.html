@@ -1,0 +1,385 @@
+<html>
+<head>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+</head>
+<style>
+  .side_bar{
+    background: #8E2DE2;  /* fallback for old browsers */
+    background: -webkit-linear-gradient(to right, #4A00E0, #8E2DE2);  /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to right, #4A00E0, #8E2DE2); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    
+  }
+</style>
+
+<body>
+  <div class="h1 mt-2 mb-2 display-1 text-center">
+    <img width="150" src="{{ url_for('static', filename='live.gif') }}" alt="Live">
+    Data Visualization
+  </div>
+  <div class="container">
+    <div class="row mt-2">
+        <div class="side_bar col-md-3 p-3 text-light">
+            <div class="form-group">
+              <label for="end-year">End Year:</label>
+              <select id="end-year" class="form-control">
+                  <option value="">--Select--</option>
+              </select>
+            </div>
+            <div class="form-group">
+                <label for="intensity">Intensity:</label>
+                <select id="intensity" class="form-control">
+                    <option value="">--Select--</option>
+                </select>
+            </div>
+            <div class="form-group">
+              <label for="sector">Sector:</label>
+              <select id="sector" class="form-control">
+                  <option value="">--Select--</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="topic">Topic:</label>
+              <select id="topic" class="form-control">
+                  <option value="">--Select--</option>
+              </select>
+            </div>
+
+
+            <div class="form-group">
+              <label for="region">Region:</label>
+              <select id="region" class="form-control">
+                  <option value="">--Select--</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="start-year">Start Year:</label>
+              <select id="start-year" class="form-control">
+                  <option value="">--Select--</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="country">Country:</label>
+              <select id="country" class="form-control">
+                  <option value="">--Select--</option>
+              </select>
+          </div>
+
+        
+            <div class="form-group">
+                <label for="relevance">Relevance:</label>
+                <select id="relevance" class="form-control">
+                    <option value="">--Select--</option>
+                </select>
+            </div>
+           
+            <div class="form-group">
+              <label for="pestle">Pestle:</label>
+              <select id="pestle" class="form-control">
+                  <option value="">--Select--</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="source">Source:</label>
+              <select id="source" class="form-control">
+                  <option value="">--Select--</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="likelihood">Likelihood:</label>
+              <select id="likelihood" class="form-control">
+                  <option value="">--Select--</option>
+              </select>
+          </div>
+        </div>
+        <div class="col-md-9 border">
+            <div id="chart"></div>
+        </div>
+    </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+
+    <script>
+        $(document).ready(function() {
+            var data = [];
+
+            // Populate the filter options with the unique values from the data
+            $.ajax({
+                url: 'http://localhost:5000/api/v1/records',
+                dataType: 'json',
+                success: function(response) {
+                    data = response;
+
+                    var end_years = [];
+                    var intensities = [];
+                    var sectors = [];
+                    var topics = [];
+                    var regions = [];
+                    var start_years = [];
+                    var countries = [];
+                    var relevances = [];
+                    var pestles = [];
+                    var sources = [];
+                    var likelihoods = [];
+                 
+
+                    data.forEach(function(d) {
+                        if (end_years.indexOf(d.end_year) === -1) {
+                          end_years.push(d.end_year);
+                        }
+
+                        if (intensities.indexOf(d.intensity) === -1) {
+                            intensities.push(d.intensity);
+                        }
+
+                        if (sectors.indexOf(d.sector) === -1) {
+                          sectors.push(d.sector);
+                        }
+
+                        if (topics.indexOf(d.topic) === -1) {
+                          topics.push(d.topic);
+                        }
+
+                        if (regions.indexOf(d.region) === -1) {
+                            regions.push(d.region);
+                        }
+
+                        if (start_years.indexOf(d.start_year) === -1) {
+                            start_years.push(d.start_year);
+                        }
+
+                        
+                        if (countries.indexOf(d.country) === -1) {
+                          countries.push(d.country);
+                        }
+
+                        if (relevances.indexOf(d.relevance) === -1) {
+                          relevances.push(d.relevance);
+                        }
+
+                        
+
+                        if (pestles.indexOf(d.pestle) === -1) {
+                          pestles.push(d.pestle);
+                        }
+
+                        if (sources.indexOf(d.source) === -1) {
+                          sources.push(d.source);
+                        }
+
+
+                        if (likelihoods.indexOf(d.likelihood) === -1) {
+                            likelihoods.push(d.likelihood);
+                        }
+                      
+                    });
+
+
+                      start_years.sort();
+                      end_years.sort();
+                      intensities.sort();
+                      relevances.sort();
+                      likelihoods.sort();
+
+
+                      end_years.forEach(function(e) {
+                        $('#end-year').append($('<option>', { value: e, text: e }));
+                      });
+
+                      intensities.forEach(function(i) {
+                          $('#intensity').append($('<option>', { value: i, text: i }));
+                      });
+
+                      sectors.forEach(function(s) {
+                        $('#sector').append($('<option>', { value: s, text: s }));
+                      });
+
+                      topics.forEach(function(t) {
+                        $('#topic').append($('<option>', { value: t, text: t }));
+                      });
+      
+                      regions.forEach(function(rg) {
+                          $('#region').append($('<option>', { value: rg, text: rg }));
+                      });
+
+
+                      start_years.forEach(function(y) {
+                        $('#start-year').append($('<option>', { value: y, text: y }));
+                      });
+
+                      countries.forEach(function(c) {
+                        $('#country').append($('<option>', { value: c, text: c }));
+                      });
+
+                      relevances.forEach(function(r) {
+                        $('#relevance').append($('<option>', { value: r, text: r }));
+                      });
+
+                      pestles.forEach(function(p) {
+                        $('#pestle').append($('<option>', { value: p, text: p }));
+                      });
+
+                      sources.forEach(function(sr) {
+                        $('#source').append($('<option>', { value: sr, text: sr }));
+                      });
+
+                      likelihoods.forEach(function(l) {
+                          $('#likelihood').append($('<option>', { value: l, text: l }));
+                      });
+
+
+        
+                        // Add event listeners to the filter options
+                        $('#end-year').on('change', filterData);
+                        $('#intensity').on('change', filterData);
+                        $('#sector').on('change', filterData);
+                        $('#topic').on('change', filterData);
+                        $('#region').on('change', filterData);
+                        $('#start-year').on('change', filterData);
+                        $('#country').on('change', filterData);
+                        $('#relevance').on('change', filterData);
+                        $('#pestle').on('change', filterData);
+                        $('#source').on('change', filterData);
+                        $('#likelihood').on('change', filterData);
+        
+                        function filterData() {
+                            var end_year = $('#end-year').val();
+                            var intensity = $('#intensity').val();
+                            var sector = $('#sector').val();
+                            var topic = $('#topic').val();
+                            var region = $('#region').val();
+                            var start_year = $('#start_year').val();
+                            var country = $('#country').val();
+                            var relevance = $('#relevance').val();
+                            var pestle = $('#pestle').val();
+                            var source = $('#source').val();
+                            var likelihood = $('#likelihood').val();
+        
+                            var filteredData = data;
+
+                            if (end_year) {
+                              filteredData = filteredData.filter(function(d) {
+                                return parseInt(d.end_year) === parseInt(end_year);
+                              });
+                            }
+
+                            if (intensity) {
+                              filteredData = filteredData.filter(function(d) {
+                                return parseInt(d.intensity) === parseInt(intensity);
+                              });
+                            }
+
+                            if (sector) {
+                              filteredData = filteredData.filter(function(d) {
+                                  return d.sector === sector;
+                              });
+                          }
+      
+                            if (topic) {
+                                filteredData = filteredData.filter(function(d) {
+                                    return d.topic === topic;
+                                });
+                            }
+        
+                            if (region) {
+                                filteredData = filteredData.filter(function(d) {
+                                    return d.region === region;
+                                });
+                            }
+        
+                            if (start_year) {
+                              filteredData = filteredData.filter(function(d) {
+                                return parseInt(d.start_year) === parseInt(start_year);
+                              });
+                          }
+
+                            if (country) {
+                                filteredData = filteredData.filter(function(d) {
+                                    return d.country === country;
+                                });
+                            }
+                            
+                            
+      
+                            if (relevance) {
+                                filteredData = filteredData.filter(function(d) {
+                                  return parseInt(d.relevance) === parseInt(relevance);
+                                });
+                            }
+
+                            if (pestle) {
+                                filteredData = filteredData.filter(function(d) {
+                                    return d.pestle === pestle;
+                                });
+                            }                            
+
+              
+                            if (source) {
+                                filteredData = filteredData.filter(function(d) {
+                                    return d.source === source;
+                                });
+                            }
+                            
+                            if (likelihood) {
+                              filteredData = filteredData.filter(function(d) {
+                                return parseInt(d.likelihood) === parseInt(likelihood);
+                              });
+                          }
+
+
+
+                            console.log(JSON.stringify(filteredData));
+                           
+
+
+
+                            // Create a trace for the intensity bar
+                            var intensityTrace = {
+                              x: intensities,
+                              y: data.map(function(d) { return d.intensity; }),
+                              name: 'Intensity',
+                              type: 'bar',
+                              marker: {
+                                  color: 'blue'
+                              }
+                          };
+
+                          // Create a trace for the likelihood bar
+                          var likelihoodTrace = {
+                              x: likelihoods,
+                              y: data.map(function(d) { return d.likelihood; }),
+                              name: 'Likelihood',
+                              type: 'bar',
+                              marker: {
+                                  color: 'red'
+                              }
+                          };
+
+                          // Set the layout options for the chart
+                          var layout = {
+                              title: 'Intensity and Likelihood Bar Chart',
+                              xaxis: {
+                                  title: 'Intensity/Likelihood'
+                              },
+                              yaxis: {
+                                  title: 'Count'
+                              }
+                          };
+
+                          // Create the chart by combining the two traces and the layout options
+                          var chartData = [intensityTrace, likelihoodTrace];
+                          Plotly.newPlot('chart', chartData, layout);
+
+                        }
+                    }
+                });
+            });
+        </script>
+</body>
+</html>        
